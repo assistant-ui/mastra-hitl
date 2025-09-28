@@ -9,6 +9,10 @@ AI agent that asks for your approval at every step. Built with [assistant-ui](ht
 ✅ **Email Preview** - Approve drafts before sending
 ✅ **Never Acts Alone** - Every action requires explicit approval
 
+## Demo
+
+[Watch the demo](https://github.com/user-attachments/assets/8c19f83a-b29f-4631-9bfc-556c99a3355d)
+
 ## Quick Start
 
 ```bash
