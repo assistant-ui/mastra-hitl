@@ -46,6 +46,7 @@ export const AskForPlanApprovalToolUI = makeAssistantToolUI<
   render: function Render({ status, result, addResult }) {
     const latestTodos = useLatestTodos();
     const isCompleted = status.type === "complete";
+    const isRunning = status.type === "running";
     const isApproved = result?.approved;
     const isToolRejected =
       status.type === "incomplete" || (isCompleted && isApproved === false);
@@ -242,7 +243,7 @@ export const AskForPlanApprovalToolUI = makeAssistantToolUI<
                   type="button"
                   variant="outline"
                   onClick={handleReject}
-                  disabled={isCompleted}
+                  disabled={isCompleted || isRunning}
                   className="h-8 px-3 text-sm"
                 >
                   Reject Plan
@@ -250,7 +251,7 @@ export const AskForPlanApprovalToolUI = makeAssistantToolUI<
                 <Button
                   type="button"
                   onClick={handleApprove}
-                  disabled={isCompleted || todos.length === 0}
+                  disabled={isCompleted || isRunning || todos.length === 0}
                   className="h-8 px-3 text-sm"
                 >
                   Approve & Continue

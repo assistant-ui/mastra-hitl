@@ -1,13 +1,14 @@
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
-import { Resend } from "resend";
 
-const getResendClient = () => {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    throw new Error("RESEND_API_KEY environment variable is not set. The email-tool is currently unavailable.");
-  }
-  return new Resend(apiKey);
+// Check if Resend API key is configured
+const hasResendKey = () => {
+  return !!process.env.RESEND_API_KEY;
+};
+
+const getResendClient = async () => {
+  const { Resend } = await import("resend");
+  return new Resend(process.env.RESEND_API_KEY);
 };
 
 const proposedEmailSchema = z.object({
@@ -96,6 +97,13 @@ export const sendEmailTool = createTool({
     response: z.string(),
   }),
   execute: async ({ context: { emailHandle } }, options) => {
+    // Check if Resend API key is configured
+    if (!hasResendKey()) {
+      throw new Error(
+        "Email sending is not configured. Please inform the user that they need to add a RESEND_API_KEY to their .env file to enable email functionality. They can get an API key at https://resend.com/api-keys"
+      );
+    }
+
     const messages = options?.messages as ModelMessage[] | undefined;
     const proposedEmail = findProposedEmail(messages, emailHandle);
 
@@ -107,7 +115,7 @@ export const sendEmailTool = createTool({
 
     const { to, subject, body } = proposedEmail;
 
-    const resend = getResendClient();
+    const resend = await getResendClient();
     await resend.emails.send({
       from: "Assistant UI <onboarding@resend.dev>",
       to: [to],

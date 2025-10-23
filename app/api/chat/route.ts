@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
   const agent = mastra.getAgent("humanInTheLoopAgent");
 
-  const stream = await agent.streamVNext(convertToModelMessages(messages), {
+  const stream = await agent.stream(convertToModelMessages(messages), {
     format: "aisdk",
     maxSteps: 10,
     modelSettings: {},
