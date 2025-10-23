@@ -21,6 +21,49 @@ for /f "tokens=*" %%i in ('node -v') do set NODE_VERSION=%%i
 echo [OK] Node.js %NODE_VERSION% detected
 echo.
 
+REM Check for git updates
+where git >nul 2>nul
+if %errorlevel% equ 0 (
+    if exist .git (
+        echo Checking for updates...
+        git fetch 2>nul
+
+        REM Get current branch
+        for /f "tokens=*" %%i in ('git branch --show-current 2^>nul') do set CURRENT_BRANCH=%%i
+
+        if not "!CURRENT_BRANCH!"=="" (
+            REM Get local and remote commits
+            for /f "tokens=*" %%i in ('git rev-parse !CURRENT_BRANCH! 2^>nul') do set LOCAL_COMMIT=%%i
+            for /f "tokens=*" %%i in ('git rev-parse origin/!CURRENT_BRANCH! 2^>nul') do set REMOTE_COMMIT=%%i
+
+            if not "!LOCAL_COMMIT!"=="!REMOTE_COMMIT!" (
+                REM Check if local is behind remote
+                for /f "tokens=*" %%i in ('git rev-list --count !CURRENT_BRANCH!..origin/!CURRENT_BRANCH! 2^>nul') do set BEHIND_COUNT=%%i
+
+                if !BEHIND_COUNT! gtr 0 (
+                    echo There are !BEHIND_COUNT! new commit(s) available on origin/!CURRENT_BRANCH!.
+                    set /p PULL_UPDATES="Would you like to pull the updates? (y/n): "
+                    if /i "!PULL_UPDATES!"=="y" (
+                        echo Pulling updates...
+                        git pull
+                        echo [OK] Updates applied successfully
+                        echo.
+                    ) else (
+                        echo Continuing without pulling updates.
+                        echo.
+                    )
+                ) else (
+                    echo [OK] No updates available
+                    echo.
+                )
+            ) else (
+                echo [OK] No updates available
+                echo.
+            )
+        )
+    )
+)
+
 REM Check if npm is installed
 where npm >nul 2>nul
 if %errorlevel% neq 0 (

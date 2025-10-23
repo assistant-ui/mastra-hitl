@@ -1,6 +1,6 @@
 "use client";
 
-import { AssistantRuntimeProvider } from "@assistant-ui/react";
+import { AssistantCloud, AssistantRuntimeProvider } from "@assistant-ui/react";
 import { useChatRuntime } from "@assistant-ui/react-ai-sdk";
 import { Thread } from "@/components/assistant-ui/thread";
 import {
@@ -33,6 +33,12 @@ import { lastAssistantMessageIsCompleteWithToolCalls } from "ai";
 
 export const Assistant = () => {
   const runtime = useChatRuntime({
+    cloud: new AssistantCloud({
+      baseUrl:
+        process.env.NEXT_PUBLIC_ASSISTANT_CLOUD_URL ||
+        "https://proj-0d1uavfgy8fj.assistant-api.com",
+      anonymous: true,
+    }),
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
   });
 
