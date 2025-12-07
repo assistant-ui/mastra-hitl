@@ -1,4 +1,4 @@
-import { renderToString } from 'react-dom/server';
+import { render } from '@react-email/components';
 import { AssistantUIWelcomeEmail } from '@/emails/assistant-ui';
 import * as React from 'react';
 
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     const { to, subject, userName } = await req.json();
 
     // Render the email component to HTML
-    const emailHtml = renderToString(
+    const emailHtml = await render(
       React.createElement(AssistantUIWelcomeEmail, {
         userName: userName || 'there',
         steps: [
