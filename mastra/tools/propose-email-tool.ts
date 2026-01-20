@@ -20,4 +20,8 @@ export const proposeEmailTool = createTool({
     body: z.string().describe("Plaintext body of the email"),
   }),
   outputSchema,
+  execute: async ({ to, subject, body }) => {
+    const emailHandle = randomUUID();
+    return { emailHandle, to, subject, body };
+  },
 });
