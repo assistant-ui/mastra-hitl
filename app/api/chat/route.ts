@@ -1,10 +1,6 @@
 import { mastra } from "@/mastra";
 import { toAISdkStream } from "@mastra/ai-sdk";
-import {
-  convertToModelMessages,
-  createUIMessageStream,
-  createUIMessageStreamResponse,
-} from "ai";
+import { createUIMessageStream, createUIMessageStreamResponse } from "ai";
 
 export const maxDuration = 30;
 
@@ -13,7 +9,8 @@ export async function POST(req: Request) {
 
   const agent = mastra.getAgent("humanInTheLoopAgent");
 
-  const stream = await agent.stream(convertToModelMessages(messages), {
+  // Mastra handles message conversion internally - pass UIMessages directly
+  const stream = await agent.stream(messages, {
     maxSteps: 10,
     modelSettings: {},
     onError: ({ error }: { error: any }) => {
