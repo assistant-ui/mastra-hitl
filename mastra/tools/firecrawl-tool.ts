@@ -25,11 +25,11 @@ export const firecrawlTool = createTool({
   outputSchema: z.object({
     content: z.string().optional()
   }),
-  execute: async ({ context }) => {
+  execute: async ({ url }) => {
     // Use Firecrawl directly if API key is provided, otherwise use worker
     if (useFirecrawl()) {
       const firecrawl = await getFirecrawlClient();
-      const scrapeResponse = await firecrawl.scrape(context.url, {
+      const scrapeResponse = await firecrawl.scrape(url, {
         formats: ['markdown'],
         includeTags: ['title', 'meta', 'h1', 'h2', 'h3', 'p'],
         excludeTags: ['script', 'style', 'nav', 'footer'],
@@ -54,7 +54,7 @@ export const firecrawlTool = createTool({
           "Authorization": `Bearer ${tsaiApiKey}`,
         },
         body: JSON.stringify({
-          url: context.url,
+          url: url,
           formats: ['markdown'],
           includeTags: ['title', 'meta', 'h1', 'h2', 'h3', 'p'],
           excludeTags: ['script', 'style', 'nav', 'footer'],

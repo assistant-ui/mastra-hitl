@@ -96,7 +96,7 @@ export const sendEmailTool = createTool({
   outputSchema: z.object({
     response: z.string(),
   }),
-  execute: async ({ context: { emailHandle } }, options) => {
+  execute: async ({ emailHandle }, context) => {
     // Check if Resend API key is configured
     if (!hasResendKey()) {
       throw new Error(
@@ -104,8 +104,8 @@ export const sendEmailTool = createTool({
       );
     }
 
-    const messages = options?.messages as ModelMessage[] | undefined;
-    const proposedEmail = findProposedEmail(messages, emailHandle);
+    const messages = context?.agent?.messages;
+    const proposedEmail = findProposedEmail(messages as ModelMessage[] | undefined, emailHandle);
 
     if (!proposedEmail) {
       throw new Error(

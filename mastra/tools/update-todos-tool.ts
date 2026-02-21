@@ -166,14 +166,14 @@ export const updateTodosTool = createTool({
       ),
   }),
   outputSchema,
-  execute: async ({ context }, options) => {
-    const { messages } = options || {};
+  execute: async (input, context) => {
+    const messages = context?.agent?.messages;
 
     // Retrieve previous todos from message history
     const currentTodos = findPreviousTodos(messages);
 
     // Apply updates to the todo list
-    const updatedTodos = applyTodoUpdates(currentTodos, context);
+    const updatedTodos = applyTodoUpdates(currentTodos, input);
 
     return {
       todos: updatedTodos,

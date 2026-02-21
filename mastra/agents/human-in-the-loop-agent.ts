@@ -33,6 +33,7 @@ const getAnthropicModel = (modelId: string) => {
 };
 
 export const humanInTheLoopAgent = new Agent({
+  id: "humanInTheLoopAgent",
   name: "Human-in-the-Loop Assistant",
   instructions: `
       You are an AI assistant that requires human approval before taking actions.
