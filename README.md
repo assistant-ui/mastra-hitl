@@ -169,7 +169,7 @@ instructions: `
 `
 ```
 
-The agent uses Claude Sonnet 4 via either:
+The agent uses Claude Sonnet 4.6 (`claude-sonnet-4-6`) via either:
 1. Shared proxy (`https://anthropic.tsai.assistant-ui.com/v1`) with `TSAI_API_KEY`
 2. Direct Anthropic API with `ANTHROPIC_API_KEY`
 
