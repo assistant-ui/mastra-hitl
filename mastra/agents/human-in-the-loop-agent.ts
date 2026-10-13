@@ -54,7 +54,7 @@ export const humanInTheLoopAgent = new Agent({
 
       Your goal: Complete tasks effectively while ensuring the user maintains full control through explicit approval at each stage.
 `,
-  model: getAnthropicModel("claude-sonnet-4-20250514"),
+  model: getAnthropicModel("claude-sonnet-4-6"),
   tools: {
     updateTodosTool,
     askForPlanApprovalTool,
